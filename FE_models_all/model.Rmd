@@ -106,7 +106,7 @@ panel <- panel[complete.cases(panel), ]
         plot_y_lower_limit <- as.numeric(quantile(panel$totSBloans_Delt, .15, na.rm = TRUE))
         intercept <- mean(panel$totSBloans_Delt, na.rm = TRUE) - slope * mean(panel$t1_LR_lagged_1_year, na.rm = TRUE)
 
-        ggplot(panel, aes(x = t1_LR_lagged_1_year, y = totSBloans_Delt)) + geom_point(aes(colour = ROA_lagged_1)) + scale_colour_gradient(low = "green") + theme_hc(bgcolor = "darkunica") + geom_density_2d() + ylim(plot_y_lower_limit, plot_y_upper_limit) + labs(title = paste0("Capital Ratio Coef: ", round(slope, 2), " P-value: ", round(pVal, 2), " | AA Ind.", round(aa_slope, 2), " P-value: ", round(aa_pVal, 2), " | His. Ind: ", round(h_slope, 2), " P-value: ", round(h_pVal, 2)), subtitle = paste0("R-sq: ", round(Rsq, 4), "| Adj-R-sq: ", round(adjRsq, 4), "| Deg. Freedom: ", round(df, 0)), x = "T1 Leverage Ratio", y = "Change in SB Loans") + geom_abline(slope = slope, intercept = intercept)#  + theme_solarized()  + scale_colour_hc("darkunica")
+        ggplot(panel, aes(x = t1_LR_lagged_1_year, y = totSBloans_Delt)) + geom_point(aes(colour = ROA_lagged_1)) + scale_colour_gradient(low = "green") + theme_hc(bgcolor = "darkunica") + geom_density_2d() + ylim(plot_y_lower_limit, plot_y_upper_limit) + xlim(-0.15, 1) + labs(title = paste0("Capital Ratio Coef: ", round(slope, 2), " P-value: ", round(pVal, 2), " | AA Ind.", round(aa_slope, 2), " P-value: ", round(aa_pVal, 2), " | His. Ind: ", round(h_slope, 2), " P-value: ", round(h_pVal, 2)), subtitle = paste0("R-sq: ", round(Rsq, 4), "| Adj-R-sq: ", round(adjRsq, 4), "| Deg. Freedom: ", round(df, 0)), x = "T1 Leverage Ratio", y = "Change in SB Loans") + geom_abline(slope = slope, intercept = intercept)#  + theme_solarized()  + scale_colour_hc("darkunica")
 
     } else {
 
@@ -135,8 +135,8 @@ The time it takes for the model to run is increasing in the number of firms in y
 
 The model has both firm and time fixed effects ($\alpha_{it}$), and has the following specification:
 \begin{equation}
-\% \Delta SB\ Loans = \beta_1 (T1\ Lev.\ Ratio) + \beta_2 \frac{Amt.\ SB\ Loans}{TA} + \beta_3 ROA + \beta_4 \frac{NPA}{TA} + \beta_5 \frac{Deposits}{TA} + \beta_6 log(TA) + \beta_7 (post\ crisis) + \beta_8 (fin.\ crisis) + \alpha_{i} + \epsilon_{it}
+\% \Delta SB\ Loans = \beta_1 (T1\ Lev.\ Ratio) + \beta_2 \frac{Amt.\ SB\ Loans}{TA} + \beta_3 ROA + \beta_4 \frac{NPA}{TA} + \beta_5 \frac{Deposits}{TA} + \beta_6 log(TA) + \beta_7 (post\ crisis) + \beta_8 (fin.\ crisis) + \beta_9 (TE) + \alpha_{i} + \epsilon_{it}
 \end{equation}
-where *SB* denotes "Small Business", *NPA* denotes "Non-Performing Assets", and *TA* denotes "Total Assets".  *post crisis* is an indicator variable for the years 2012---2015 inclusive.  
+where *SB* denotes "Small Business", *NPA* denotes "Non-Performing Assets", and *TA* denotes "Total Assets".  *post crisis* is an indicator variable for the years 2012---2015 inclusive. *TE* is that part of total equity which is orthogonal to the tier 1 capital ratio.  
 
 The graphic below shows the $\beta_1$ coefficient and p-value, as well as the $R^2$ and number of degrees of freedom.  The color of the points in the scatter plot are dependent on the bank's ROA.  The blue lines show the 2-Dimensional density function, so you are able to see the places on the scatterplot with the most bank observations.  The density is higher for the inner blue lines.  The black line shows the sensitivity of the change in small business loans to the T1 Leverage ratio over the sample (linear regression line).
